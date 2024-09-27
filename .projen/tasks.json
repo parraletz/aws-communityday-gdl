@@ -198,13 +198,13 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/jest,esbuild,jest,projen,ts-jest,ts-node,typescript"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/jest,esbuild,jest,projen,ts-jest,ts-node,typescript,@aws-quickstart/eks-blueprints"
         },
         {
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @types/jest @types/node aws-cdk esbuild jest jest-junit projen ts-jest ts-node typescript aws-cdk-lib constructs"
+          "exec": "yarn upgrade @types/jest @types/node aws-cdk esbuild jest jest-junit projen ts-jest ts-node typescript @aws-quickstart/eks-blueprints aws-cdk-lib constructs"
         },
         {
           "exec": "npx projen"

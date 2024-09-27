@@ -1,23 +1,38 @@
-import { App, Stack, StackProps } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
+import * as blueprints from '@aws-quickstart/eks-blueprints'
+import { App, Stack, StackProps } from 'aws-cdk-lib'
+import { Construct } from 'constructs'
 
-export class MyStack extends Stack {
+export class AWSCommunityDayGDLStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps = {}) {
-    super(scope, id, props);
-
-    // define resources here...
+    super(scope, id, props)
   }
 }
 
-// for development, use account/region from cdk cli
-const devEnv = {
+const env = {
   account: process.env.CDK_DEFAULT_ACCOUNT,
   region: process.env.CDK_DEFAULT_REGION,
-};
+}
 
-const app = new App();
+const version = 'auto'
 
-new MyStack(app, 'aws-communityday-gdl-dev', { env: devEnv });
-// new MyStack(app, 'aws-communityday-gdl-prod', { env: prodEnv });
+blueprints.HelmAddOn.validateHelmVersions = true
 
-app.synth();
+const addOns: Array<blueprints.ClusterAddOn> = [
+  new blueprints.addons.MetricsServerAddOn(),
+  new blueprints.addons.KarpenterAddOn(),
+  new blueprints.addons.VpcCniAddOn(),
+  new blueprints.addons.CoreDnsAddOn(),
+  new blueprints.addons.KubeProxyAddOn(),
+]
+
+const app = new App()
+
+blueprints.EksBlueprint.builder()
+  .account(env.account)
+  .region(env.region)
+  .version(version)
+  .addOns(...addOns)
+  .useDefaultSecretEncryption(true)
+  .build(app, 'aws-communityday-gdl')
+
+app.synth()
